@@ -44,7 +44,7 @@ class Trainer:
                 fake_labels = Variable(torch.zeros(images.size(0)).cuda())
 
                 # train discriminator
-                discrim_loss, real_score, fake, score = self.disc_step(real_images, real_labels, fake_images, fake_labels)
+                discrim_loss, real_score, fake_score = self.disc_step(real_images, real_labels, fake_images, fake_labels)
 
                 # Re-sample from generator and get the discriminator's thoughts
                 new_noise = Variable(torch.randn(images.size(0), self.z_dim).cuda())
@@ -52,7 +52,10 @@ class Trainer:
                 outputs = self.discriminator(fake_images)
                 gen_loss = self.gen_step(outputs, real_labels)
 
-                # TODO: print the loss statistics for this step
+            # print the loss statistics for this step
+            print("Here's the Epoch: ", epoch)
+            print("Discriminator Statistics:\n\t Discriminator Loss: {},\n Real Loss: {},\n Fake Loss: {}".format(discrim_loss, real_score, fake_score))
+            print("Generator Loss: ", gen_loss)
 
     def disc_step(self, real_images, real_labels, fake_images, fake_labels):
         """
