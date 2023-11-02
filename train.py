@@ -11,7 +11,7 @@ and Discriminator have their zero-sum game
 """
 
 class Trainer:
-    def __init__(self, generator: nn.Module, discriminator: nn.Module):
+    def __init__(self, generator: nn.Module, discriminator: nn.Module, n_epoch: int):
         pass
 
     def train(self):
