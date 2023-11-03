@@ -14,7 +14,7 @@ EPS = 0.003
 
 def fanin_init(size, fanin=None):
 	"""
-	set the weights in some random numbers 
+	Set the weights in some random numbers 
 	uniformly distributed
 	"""
 	fanin = fanin or size[0]
@@ -43,6 +43,9 @@ class Discriminator(nn.Module):
         
         self.fc4 = nn.Linear(self.fc3.out_features, 1)
         self.fc4.weight.data = fanin_init(self.fc4.weight.data.size())
+
+        if torch.cuda.is_available():
+            self.cuda() 
 
     def forward(self, x):
         """
@@ -76,12 +79,14 @@ class Generator(nn.Module):
         self.fc2 = nn.Linear(256, 512)
         self.fc2.weight.data = fanin_init(self.fc2.weight.data.size())
 
-
         self.fc3 = nn.Linear(512, 1024)
         self.fc3.weight.data = fanin_init(self.fc3.weight.data.size())
 
         self.fc4 = nn.Linear(1024, out_size)
         self.fc4.weight.data = fanin_init(self.fc4.weight.data.size())
+
+        if torch.cuda.is_available():
+            self.cuda()
 
     def forward(self, z):
         """

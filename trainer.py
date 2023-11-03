@@ -34,7 +34,7 @@ class Trainer:
         full training process       
         """
         for epoch in range(self.num_epochs):
-            for n, (images, _) in enumerate(self.data_loader):
+            for idx, (images, labels)  in enumerate(self.data_loader):
                 real_images = Variable(images)
                 real_labels = Variable(torch.ones(images.size(0)).cuda())
 
