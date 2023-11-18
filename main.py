@@ -39,7 +39,6 @@ def test_model(generator: Generator):
     
     plt.savefig('output/results.png')
     fig.close()
-    pass
 
 if __name__=="__main__":
     # hyperparameters
@@ -53,7 +52,6 @@ if __name__=="__main__":
 
     use_cuda = torch.cuda.is_available()
     image_size = train_dataset.train_data.size(1)*train_dataset.train_data.size(2)
-    print("[__main__()] here's image size: ", image_size)
     z_dim = 100
     generator = Generator(z_dim, image_size, use_cuda)
     discriminator = Discriminator(image_size, use_cuda)
@@ -63,3 +61,5 @@ if __name__=="__main__":
     agent.train()
 
     test_model(generator)
+    generator_scripted = torch.jit.script(generator)
+    generator_scripted.save("models/generator.pth")

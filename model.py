@@ -52,9 +52,7 @@ class Discriminator(nn.Module):
         calculate probability that the data came from 
         the dataset, not the Generator
         """
-        print("forward() here's x.size: ", x.shape)
         x= x.view(x.size(0), -1) # flatten the image
-        print("forward() here's flattened x.size: ", x.shape)
 
         x = F.leaky_relu(self.fc1(x), 0.2)
         x = F.dropout(x, 0.3)

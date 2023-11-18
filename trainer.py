@@ -63,8 +63,6 @@ class Trainer:
         """
         self.D_optimizer.zero_grad()
 
-        print("disc_step() here's real_images size: ", real_images.shape)
-
         probs = self.discriminator(real_images) 
         real_L = self.loss_fn(probs, real_labels) # real loss
         real_score = probs
