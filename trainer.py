@@ -35,7 +35,7 @@ class Trainer:
         """
         for epoch in range(self.num_epochs):
             for idx, (images, labels)  in enumerate(self.data_loader):
-                real_images = Variable(images)
+                real_images = Variable(images.cuda())
                 real_labels = Variable(torch.ones(images.size(0)).cuda())
 
                 # Sample from generator
@@ -48,7 +48,7 @@ class Trainer:
 
                 # Re-sample from generator and get the discriminator's thoughts
                 new_noise = Variable(torch.randn(images.size(0), self.z_dim).cuda())
-                fake_images = self.generator(new_noise)
+                fake_images = self.generator(new_noise).cuda()
                 outputs = self.discriminator(fake_images)
                 gen_loss = self.gen_step(outputs, real_labels)
 
@@ -62,6 +62,8 @@ class Trainer:
         training step of Discriminator model
         """
         self.D_optimizer.zero_grad()
+
+        print("disc_step() here's real_images size: ", real_images.shape)
 
         probs = self.discriminator(real_images) 
         real_L = self.loss_fn(probs, real_labels) # real loss
@@ -83,6 +85,6 @@ class Trainer:
         self.G_optimizer.zero_grad()
         
         generator_L = self.loss_fn(discriminator_outputs, real_labels)
-        generator_L.backwards()
+        generator_L.backward()
         self.G_optimizer.step()
         return generator_L

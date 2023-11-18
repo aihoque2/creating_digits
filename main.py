@@ -51,10 +51,12 @@ if __name__=="__main__":
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=100, shuffle=True)    
     print("training loader is created!")
 
+    use_cuda = torch.cuda.is_available()
     image_size = train_dataset.train_data.size(1)*train_dataset.train_data.size(2)
+    print("[__main__()] here's image size: ", image_size)
     z_dim = 100
-    generator = Generator(z_dim, image_size)
-    discriminator = Discriminator(image_size)
+    generator = Generator(z_dim, image_size, use_cuda)
+    discriminator = Discriminator(image_size, use_cuda)
 
     # Create Trainer
     agent = Trainer(generator, discriminator, num_epochs, learning_rate, train_loader, 100)

@@ -28,7 +28,7 @@ class Discriminator(nn.Module):
     samples
     """
 
-    def __init__(self, input_size):
+    def __init__(self, input_size, use_cuda):
 
         super(Discriminator, self).__init__()
         
@@ -44,7 +44,7 @@ class Discriminator(nn.Module):
         self.fc4 = nn.Linear(self.fc3.out_features, 1)
         self.fc4.weight.data = fanin_init(self.fc4.weight.data.size())
 
-        if torch.cuda.is_available():
+        if use_cuda:
             self.cuda() 
 
     def forward(self, x):
@@ -52,13 +52,17 @@ class Discriminator(nn.Module):
         calculate probability that the data came from 
         the dataset, not the Generator
         """
+        print("forward() here's x.size: ", x.shape)
+        x= x.view(x.size(0), -1) # flatten the image
+        print("forward() here's flattened x.size: ", x.shape)
+
         x = F.leaky_relu(self.fc1(x), 0.2)
         x = F.dropout(x, 0.3)
         x = F.leaky_relu(self.fc2(x), 0.2)
         x = F.dropout(x, 0.3)
         x = F.leaky_relu(self.fc3(x), 0.2)
         x = F.dropout(x, 0.3)
-        return F.sigmoid(self.fc4(x))
+        return F.sigmoid(self.fc4(x)).squeeze()
 
 
 class Generator(nn.Module):
@@ -69,7 +73,7 @@ class Generator(nn.Module):
     comes with its own probability distribution of generated images!
     """
 
-    def __init__(self, input_size, out_size):
+    def __init__(self, input_size, out_size, use_cuda):
         
         super(Generator, self).__init__()
         
@@ -85,7 +89,7 @@ class Generator(nn.Module):
         self.fc4 = nn.Linear(1024, out_size)
         self.fc4.weight.data = fanin_init(self.fc4.weight.data.size())
 
-        if torch.cuda.is_available():
+        if use_cuda:
             self.cuda()
 
     def forward(self, z):
