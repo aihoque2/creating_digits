@@ -54,8 +54,9 @@ class Trainer:
 
             # print the loss statistics for this step
             print("Here's the Epoch: ", epoch)
-            print("Discriminator Statistics:\n\t Discriminator Loss: {},\n Real Loss: {},\n Fake Loss: {}".format(discrim_loss, real_score, fake_score))
-            print("Generator Loss: ", gen_loss)
+            print("Discriminator Statistics:\n\t Discriminator Loss: {},\n Real Loss: {},\n Fake Loss: {}\n".format(discrim_loss, real_score, fake_score))
+            
+            print("Generator Statistics:\n\t Generator Loss: ", gen_loss)
 
     def disc_step(self, real_images, real_labels, fake_images, fake_labels):
         """
